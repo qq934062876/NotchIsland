@@ -1,0 +1,64 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+    tags: ['v*']
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    # macos-14 起才有 macOS 14 SDK；这里只做源码构建，不做签名与公证
+    runs-on: macos-14
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: 查看工具链
+        run: |
+          swift --version
+          uname -m
+
+      - name: 构建
+        run: |
+          chmod +x build.sh
+          OUT=dist/NotchIsland APP_DIR=dist/NotchIsland.app ./build.sh
+
+      - name: 校验产物
+        run: |
+          test -x dist/NotchIsland.app/Contents/MacOS/NotchIsland
+          /usr/libexec/PlistBuddy -c "Print :LSMinimumSystemVersion" dist/NotchIsland.app/Contents/Info.plist
+          otool -l dist/NotchIsland.app/Contents/MacOS/NotchIsland | grep -A3 LC_BUILD_VERSION
+
+      - name: 打包
+        run: |
+          cd dist
+          ditto -c -k --keepParent NotchIsland.app NotchIsland.zip
+          shasum -a 256 NotchIsland.zip > NotchIsland.zip.sha256
+          cat NotchIsland.zip.sha256
+
+      - name: 上传构建产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: NotchIsland
+          path: |
+            dist/NotchIsland.zip
+            dist/NotchIsland.zip.sha256
+
+      - name: 发布 Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            dist/NotchIsland.zip
+            dist/NotchIsland.zip.sha256
+          generate_release_notes: true
+          body: |
+            > 源码分发的构建产物：ad-hoc 签名、未公证，首次打开可能被 Gatekeeper 拦下。
+            > 下载后先核对 SHA-256，再执行：
+            > `xattr -dr com.apple.quarantine NotchIsland.app`
+            >
+            > 需要在带刘海的 Apple Silicon MacBook 上运行，系统 macOS 14.0+。

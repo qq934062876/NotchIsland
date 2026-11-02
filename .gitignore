@@ -1,0 +1,19 @@
+# 构建产物
+/NotchIsland
+/NotchIsland.app/
+*.app/
+dist/
+_CodeSignature/
+*.dSYM/
+.build/
+
+# 图标中间产物（只保留 Assets/AppIcon.icns）
+Assets/AppIcon.iconset/
+
+# 系统与编辑器
+.DS_Store
+*.swp
+*.log
+
+# AI 助手产物（计划/会话数据，不入库）
+.codebuddy/

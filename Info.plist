@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleIdentifier</key>
+    <string>local.notch.island</string>
+    <key>CFBundleExecutable</key>
+    <string>NotchIsland</string>
+    <key>CFBundleName</key>
+    <string>NotchIsland</string>
+    <key>CFBundleDisplayName</key>
+    <string>NotchIsland</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleIconFile</key>
+    <string>AppIcon</string>
+    <key>CFBundleShortVersionString</key>
+    <string>0.2.0</string>
+    <key>CFBundleVersion</key>
+    <string>2</string>
+    <key>LSMinimumSystemVersion</key>
+    <string>14.0</string>
+    <key>LSApplicationCategoryType</key>
+    <string>public.app-category.utilities</string>
+    <key>LSUIElement</key>
+    <true/>
+    <key>NSHighResolutionCapable</key>
+    <true/>
+    <!-- 主页要读今日日程；用户拒绝就只显示日期与星期，不重复询问 -->
+    <key>NSCalendarsFullAccessUsageDescription</key>
+    <string>在灵动岛主页显示今天的日程安排</string>
+    <!-- Apple Music / Spotify 没有对外接口，只能让 osascript 代读脚本字典。
+         缺这个键时系统不弹窗直接拒绝（tccd 判 errAEEventNotPermitted），
+         表现就是「音乐在放但岛里什么都没有」；拒绝后按没有曲目处理，不重复问 -->
+    <key>NSAppleEventsUsageDescription</key>
+    <string>读取 Apple Music 与 Spotify 的曲目信息以在灵动岛显示歌名、封面，并转发播放、暂停与切歌</string>
+</dict>
+</plist>

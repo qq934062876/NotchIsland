@@ -1,0 +1,76 @@
+name: Bug 报告
+description: 功能不符合预期、崩溃、权限或布局异常
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        请先确认：系统是 macOS 14.0+，机型是带刘海的 MacBook，且问题能在最新源码构建上复现。
+        安全相关的问题请不要开公开 issue，按 [SECURITY.md](../SECURITY.md) 私下报告。
+
+  - type: input
+    id: macos
+    attributes:
+      label: macOS 版本
+      description: 例如 14.6.1 / 15.2；可从「关于本机」复制
+    validations:
+      required: true
+
+  - type: input
+    id: model
+    attributes:
+      label: 机型
+      description: 例如 Mac14,2（菜单栏 → 关于本机 → 更多信息 → 系统报告）
+    validations:
+      required: true
+
+  - type: dropdown
+    id: capability
+    attributes:
+      label: 相关能力开关
+      description: 设置里的三个开关当时是开还是关
+      multiple: true
+      options:
+        - 读取正在播放：开
+        - 读取正在播放：关
+        - 允许岛管理播放器：开
+        - 允许岛管理播放器：关
+        - 显示今日日程：开
+        - 显示今日日程：关
+        - 与开关无关
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: 复现步骤
+      placeholder: |
+        1. 启动 App
+        2. 把光标移进刘海
+        3. ...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: 预期与实际
+      description: 同时写清「你以为什么应该发生」和「实际看到了什么」
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: 诊断日志
+      description: |
+        从终端启动并加环境变量，贴相关行（可用 grep 过滤 env / geometry / pick）：
+        `NOTCH_DEBUG=1 ./NotchIsland.app/Contents/MacOS/NotchIsland 2>&1 | tee /tmp/ni.log`
+      render: shell
+
+  - type: input
+    id: version
+    attributes:
+      label: 版本
+      description: 设置窗「关于」里的版本号，或 git commit
+    validations:
+      required: true
